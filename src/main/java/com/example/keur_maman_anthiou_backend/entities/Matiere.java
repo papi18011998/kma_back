@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @NoArgsConstructor
 public class Matiere{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

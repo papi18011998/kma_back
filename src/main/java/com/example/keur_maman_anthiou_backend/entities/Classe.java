@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data  @NoArgsConstructor
 public class Classe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +18,10 @@ public class Classe {
     private Collection<Eleve> eleves;
     @ManyToMany
     private Collection<Professeur> professeurs;
+
+    public Classe(Long id, String libelle, Collection<Eleve> eleves) {
+        this.id = id;
+        this.libelle = libelle;
+        this.eleves = eleves;
+    }
 }

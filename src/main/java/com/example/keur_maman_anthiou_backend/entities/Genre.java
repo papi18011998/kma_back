@@ -15,6 +15,4 @@ public class Genre {
     private Long id;
     @Column(nullable = false, unique = true, length = 50)
     private String libelle;
-    @OneToMany(mappedBy = "genre")
-    private Collection<Utilisateur> utilisateurs;
 }

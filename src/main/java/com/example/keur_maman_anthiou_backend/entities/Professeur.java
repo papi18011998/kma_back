@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @DiscriminatorValue("professeur")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @NoArgsConstructor
 public class Professeur extends  Utilisateur{
     private  String telephone;
     @Temporal(TemporalType.DATE)
@@ -19,4 +19,11 @@ public class Professeur extends  Utilisateur{
     private Matiere matiere;
     @ManyToMany
     private Collection<Classe>classes;
+
+    public Professeur(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, String telephone, Date date_prise_fonction, Matiere matiere) {
+        super(id, prenom, nom, login, password, adresse, is_active, genre);
+        this.telephone = telephone;
+        this.date_prise_fonction = date_prise_fonction;
+        this.matiere = matiere;
+    }
 }
