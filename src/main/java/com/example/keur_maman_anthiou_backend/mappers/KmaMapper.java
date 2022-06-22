@@ -3,7 +3,9 @@ package com.example.keur_maman_anthiou_backend.mappers;
 import com.example.keur_maman_anthiou_backend.dto.*;
 import com.example.keur_maman_anthiou_backend.entities.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 
+@Service
 public class KmaMapper {
 
     public Administrateur adminDTO_to_admin(AdministrateurDTO administrateurDTO){
@@ -82,6 +84,12 @@ public class KmaMapper {
         Classe classe = new Classe();
         BeanUtils.copyProperties(classeDTO,classe);
         return  classe;
+    }
+
+    public ClasseDTO classe_to_classeDTO(Classe classe){
+        ClasseDTO classeDTO = new ClasseDTO();
+        BeanUtils.copyProperties(classe,classeDTO);
+        return  classeDTO;
     }
 
      public Evaluation evaluationDTO_to_evaluation(EvaluationDTO evaluationDTO){
