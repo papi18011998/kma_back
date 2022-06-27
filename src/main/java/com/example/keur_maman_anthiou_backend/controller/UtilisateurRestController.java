@@ -2,6 +2,7 @@ package com.example.keur_maman_anthiou_backend.controller;
 
 import com.example.keur_maman_anthiou_backend.dto.UtilisateurDTO;
 import com.example.keur_maman_anthiou_backend.services.IUtilisateur;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class UtilisateurRestController {
     public UtilisateurRestController(IUtilisateur iUtilisateur) {
         this.iUtilisateur = iUtilisateur;
     }
-    @GetMapping("/utilisateurs")
+    @GetMapping(path="/utilisateurs",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UtilisateurDTO> getUsers(){
         return  iUtilisateur.getUsers();
     }

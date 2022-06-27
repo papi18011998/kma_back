@@ -17,16 +17,17 @@ public class Eleve extends Utilisateur{
     private Date date_naissance;
     @ManyToOne
     private  Parent parent;
-    @ManyToOne
-    private Classe classe;
+
+    @OneToMany(mappedBy = "eleve")
+    private Collection<EleveClasse> annees;
+
     @OneToMany
     private Collection<Evaluation> evaluations;
 
-    public Eleve(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, String matricule, Date date_naissance, Parent parent, Classe classe) {
+    public Eleve(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, String matricule, Date date_naissance, Parent parent) {
         super(id, prenom, nom, login, password, adresse, is_active, genre);
         this.matricule = matricule;
         this.date_naissance = date_naissance;
         this.parent = parent;
-        this.classe = classe;
     }
 }

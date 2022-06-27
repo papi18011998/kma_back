@@ -1,6 +1,5 @@
 package com.example.keur_maman_anthiou_backend.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,9 +16,9 @@ public class Professeur extends  Utilisateur{
     private Date date_prise_fonction;
     @ManyToOne
     private Matiere matiere;
-    @ManyToMany
-    private Collection<Classe>classes;
 
+    @OneToMany(mappedBy = "professeur")
+    private Collection<ClasseProfesseur> annees;
     public Professeur(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, String telephone, Date date_prise_fonction, Matiere matiere) {
         super(id, prenom, nom, login, password, adresse, is_active, genre);
         this.telephone = telephone;

@@ -14,14 +14,12 @@ public class Classe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String libelle;
-    @OneToMany
-    private Collection<Eleve> eleves;
-    @ManyToMany
-    private Collection<Professeur> professeurs;
-
-    public Classe(Long id, String libelle, Collection<Eleve> eleves) {
+    @OneToMany(mappedBy = "classe")
+    private Collection<EleveClasse> annees;
+    @OneToMany(mappedBy = "classe")
+    private Collection<ClasseProfesseur> professeurs_classes;
+    public Classe(Long id, String libelle) {
         this.id = id;
         this.libelle = libelle;
-        this.eleves = eleves;
     }
 }
