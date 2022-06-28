@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
@@ -21,11 +22,11 @@ public class Eleve extends Utilisateur{
     @OneToMany(mappedBy = "eleve")
     private Collection<EleveClasse> annees;
 
-    @OneToMany
+    @OneToMany(mappedBy = "eleve")
     private Collection<Evaluation> evaluations;
 
-    public Eleve(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, String matricule, Date date_naissance, Parent parent) {
-        super(id, prenom, nom, login, password, adresse, is_active, genre);
+    public Eleve(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, @Size(max = 12, message = "Le numero de te telephone de peut pas depasser 9 chiffres") String telephone, String matricule, Date date_naissance, Parent parent) {
+        super(id, prenom, nom, login, password, adresse, is_active, genre, telephone);
         this.matricule = matricule;
         this.date_naissance = date_naissance;
         this.parent = parent;

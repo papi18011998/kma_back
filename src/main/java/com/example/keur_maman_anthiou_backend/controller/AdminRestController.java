@@ -18,12 +18,12 @@ public class AdminRestController {
         this.iAdministrateur = iAdministrateur;
     }
 
-    @GetMapping(path="/administrateurs")
+    @GetMapping(path="/administrateurs", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AdministrateurDTO> getAdmins(){
         return iAdministrateur.getAdmins();
     }
 
-    @GetMapping("/administrateurs/{id}")
+    @GetMapping(value = "/administrateurs/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AdministrateurDTO getAdmin(@PathVariable Long id){
         return iAdministrateur.getAdmin(id);
     }

@@ -1,6 +1,7 @@
 package com.example.keur_maman_anthiou_backend;
 import com.example.keur_maman_anthiou_backend.entities.*;
 import com.example.keur_maman_anthiou_backend.repositories.*;
+import com.github.javafaker.Faker;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +17,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import javax.validation.constraints.Size;
 
 @SpringBootApplication
 @Transactional
@@ -36,118 +39,178 @@ public class KeurMamanAnthiouBackendApplication {
 //            System.out.println(message.getSid());
 //        };
 //    }
-//    @Bean
-//    CommandLineRunner start(AdministrateurRepository administrateurRepository,
-//                            EleveRepository eleveRepository,
-//                            ParentRepository parentRepository,
-//                            ProfesseurRepository professeurRepository,
-//                            GenreRepository genreRepository,
-//                            MatiereRepository matiereRepository,
-//                            ClasseRepository classeRepository,
-//                            EvaluationRepository evaluationRepository){
-//        return  args -> {
-//            Collection<Genre> genres = new ArrayList<>();
-//            Genre genre1 = new Genre(null,"Masculin");
-//            Genre genre2 = new Genre(null,"Feminin");
-//            genres.add(genre1);
-//            genres.add(genre2);
-//            genreRepository.saveAll(genres);
-//
-//            List<Matiere> matieres = new ArrayList<>();
-//            Matiere matiere1 = new Matiere();
-//            matiere1.setCoefficient(4);
-//            matiere1.setLibelle("Mathematiques");
-//            Matiere matiere2 = new Matiere();
-//            matiere2.setCoefficient(2);
-//            matiere2.setLibelle("HISTO-GEO");
-//            matieres.add(matiere1);
-//            matieres.add(matiere2);
-//            Random aleatoire = new Random();
-//            matiereRepository.saveAll(matieres);
-//
-//            Collection<Administrateur> administrateurs = new ArrayList<>();
-//            Administrateur admin1 = new Administrateur(null, "Papa Ibrahima", "NDIAYE", "papi", "1234", "Diroga Cherif", true,genreRepository.findById(1L).orElse(null), "776692537");
-//            Administrateur admin2 = new Administrateur(null, "Cheikh", "SOW", "cheikh", "1234", "Malika", true,genreRepository.findById(1L).orElse(null), "776622537");
-//            Administrateur admin3 = new Administrateur(null, "Jacques Etienne", "NDIAYE", "jacques", "1234", "Keur Massar", true,genreRepository.findById(1L).orElse(null), "776622588");
-//            Administrateur admin4 = new Administrateur(null, "Maimouna", "DIALLO", "maimouna", "1234", "Maristes", true,genreRepository.findById(2L).orElse(null), "776622521");
-//            administrateurs.add(admin1);
-//            administrateurs.add(admin2);
-//            administrateurs.add(admin3);
-//            administrateurs.add(admin4);
-//            administrateurRepository.saveAll(administrateurs);
-//
-//            Collection<Professeur> professeurs = new ArrayList<>();
-//            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-//            for(int i=0;i<20;i++){
-//                Professeur prof = new Professeur(null, RandomString.make(12), RandomString.make(7).toUpperCase(), "professeur"+RandomString.make(4), "1234", "Diroga Cherif", (Math.random()<0.5)?true:false,genreRepository.findById((Math.random()<0.5)?1L:2L).orElse(null),"77"+aleatoire.nextInt(7,9999999),df.parse("12-12-2000"),matiereRepository.findById((Math.random()<0.5)?1L:2L).orElse(null));
-//                professeurs.add(prof);
-//            }
-//            professeurRepository.saveAll(professeurs);
-//
-//            List<Classe> classes = new ArrayList<>();
-//            Classe CI = new Classe(null,"CI",null);
-//            Classe CP = new Classe(null,"CP",null);
-//            Classe CE1 = new Classe(null,"CE1",null);
-//            Classe CE2 = new Classe(null,"CE2",null);
-//            Classe CM1 = new Classe(null,"CM1",null);
-//            Classe CM2 = new Classe(null,"CM2",null);
-//            Classe six = new Classe(null,"6eme",null);
-//            Classe cinq = new Classe(null,"5eme",null);
-//            Classe quatre = new Classe(null,"4eme",null);
-//            Classe trois = new Classe(null,"3eme",null);
-//            Classe seconde = new Classe(null,"2nd",null);
-//            Classe premiere = new Classe(null,"1ere",null);
-//            Classe terminal = new Classe(null,"terminale",null);
-//
-//            classes.add(CI);
-//            classes.add(CP);
-//            classes.add(CE1);
-//            classes.add(CE2);
-//            classes.add(CM1);
-//            classes.add(CM2);
-//            classes.add(six);
-//            classes.add(cinq);
-//            classes.add(quatre);
-//            classes.add(trois);
-//            classes.add(seconde);
-//            classes.add(premiere);
-//            classes.add(terminal);
-//            classeRepository.saveAll(classes);
-//
-//            Collection<Parent> parents = new ArrayList<>();
-//            for (int i=1; i<=20;i++){
-//               Parent parent = new Parent(null,RandomString.make(8),RandomString.make(8), RandomString.make(8)+"parent", "1234", RandomString.make(8), (Math.random()<0.7)?true:false,(Math.random()<0.7)?genre1:genre2,"1770"+aleatoire.nextInt(9,99999), "1770"+aleatoire.nextInt(7,9999999)) ;
-//               parents.add(parent);
-//            }
-//            parentRepository.saveAll(parents);
-//            parents.forEach(parent -> {
-//                for (int i=1;i<4;i++){
-//                    Classe classe = classes.get((int)Math.ceil(Math.random()*classes.size()-1));
-//                    try {
-//                        Eleve eleve = new Eleve(null,RandomString.make(8),RandomString.make(8), RandomString.make(8)+"parent", "1234", RandomString.make(8), (Math.random()<0.7)?true:false,(Math.random()<0.7)?genre1:genre2, classe.getLibelle()+"-"+new Date()+"-"+parent.getPrenom().substring(1).toUpperCase()+parent.getNom().substring(1).toUpperCase(),df.parse("12-12-2000"),parent, classe);
-//                        eleveRepository.save(eleve);
-//                    } catch (ParseException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            });
-//            List<String> dates = new ArrayList<>();
-//            dates.add("12-04-2022");
-//            dates.add("21-07-2022");
-//            dates.add("01-01-2022");
-//            dates.add("22-02-2022");
-//            dates.add("12-03-2022");
-//            dates.add("12-11-2021");
-//            dates.add("12-10-2021");
-//            dates.add("10-11-2021");
-//            for(int i=1;i<=200;i++){
-//                Matiere matiere = matieres.get((int)Math.ceil(Math.random()*matieres.size()-1));
-//                List<Eleve> eleves = eleveRepository.findAll();
-//                Eleve eleve = eleves.get((int)Math.ceil(Math.random()*eleves.size()-1));
-//                Evaluation evaluation = new Evaluation(null,Math.random()*20,df.parse(dates.get((int) Math.floor(Math.random()*dates.size()))), matiere, eleve);
-//                evaluationRepository.save(evaluation);
-//            }
-//
-//        };
-//    }
+    @Bean
+    CommandLineRunner start(AdministrateurRepository administrateurRepository,
+                            EleveRepository eleveRepository,
+                            ParentRepository parentRepository,
+                            ProfesseurRepository professeurRepository,
+                            GenreRepository genreRepository,
+                            MatiereRepository matiereRepository,
+                            ClasseRepository classeRepository,
+                            EvaluationRepository evaluationRepository,
+                            ClasseProfesseurRepository classeProfesseurRepository,
+                            EleveClasseRepository eleveClasseRepository){
+        return  args -> {
+            // Create faker class
+            Faker faker = new Faker(new Locale("fr_SN"));
+            // Create Genres
+            Collection<Genre> genres = new ArrayList<>();
+            Genre genre1 = new Genre(null,"Masculin");
+            Genre genre2 = new Genre(null,"Feminin");
+            genres.add(genre1);
+            genres.add(genre2);
+            genreRepository.saveAll(genres);
+
+            // Create Matieres
+            List<Matiere> matieres = new ArrayList<>();
+            Matiere matiere1 = new Matiere();
+            matiere1.setCoefficient(4);
+            matiere1.setLibelle("Mathematiques");
+            Matiere matiere2 = new Matiere();
+            matiere2.setCoefficient(2);
+            matiere2.setLibelle("HISTO-GEO");
+            Matiere matiere3 = new Matiere();
+            matiere3.setCoefficient(3);
+            matiere3.setLibelle("Français");
+            Matiere matiere4 = new Matiere();
+            matiere4.setCoefficient(3);
+            matiere4.setLibelle("Anglais");
+            Matiere matiere5 = new Matiere();
+            matiere5.setCoefficient(3);
+            matiere5.setLibelle("Espagnol");
+            Matiere matiere6 = new Matiere();
+            matiere6.setCoefficient(3);
+            matiere6.setLibelle("Philosophie");
+            Matiere matiere7 = new Matiere();
+            matiere7.setCoefficient(3);
+            matiere7.setLibelle("Sciences de la vie et de la Terre");
+            matieres.add(matiere1);
+            matieres.add(matiere2);
+            matieres.add(matiere3);
+            matieres.add(matiere4);
+            matieres.add(matiere5);
+            matieres.add(matiere6);
+            matieres.add(matiere7);
+            matiereRepository.saveAll(matieres);
+
+            Random aleatoire = new Random();
+            // Create Administrateurs
+            Collection<Administrateur> administrateurs = new ArrayList<>();
+
+            Administrateur admin1 = new Administrateur(null, "Papa Ibrahima", "NDIAYE", "papi", "1234", "Diroga Cherif", true,genreRepository.findById(1L).orElse(null), "776692537");
+            Administrateur admin2 = new Administrateur(null, "Cheikh", "SOW", "cheikh", "1234", "Malika", true,genreRepository.findById(1L).orElse(null), "776622537");
+            Administrateur admin3 = new Administrateur(null, "Jacques Etienne", "NDIAYE", "jacques", "1234", "Keur Massar", true,genreRepository.findById(1L).orElse(null), "776622588");
+            Administrateur admin4 = new Administrateur(null, "Maimouna", "DIALLO", "maimouna", "1234", "Maristes", true,genreRepository.findById(2L).orElse(null), "776622521");
+            administrateurs.add(admin1);
+            administrateurs.add(admin2);
+            administrateurs.add(admin3);
+            administrateurs.add(admin4);
+            administrateurRepository.saveAll(administrateurs);
+
+            // Create Classes
+            List<Classe> classes = new ArrayList<>();
+            Classe CI = new Classe(null,"CI");
+            Classe CP = new Classe(null,"CP");
+            Classe CE1 = new Classe(null,"CE1");
+            Classe CE2 = new Classe(null,"CE2");
+            Classe CM1 = new Classe(null,"CM1");
+            Classe CM2 = new Classe(null,"CM2");
+
+            Classe sixieme = new Classe(null,"6eme");
+            Classe cinquieme = new Classe(null,"5eme");
+            Classe quatrieme = new Classe(null,"4eme");
+            Classe troisieme = new Classe(null,"3eme");
+            Classe seconde = new Classe(null,"2nd");
+            Classe premiere = new Classe(null,"1ere");
+            Classe terminale = new Classe(null,"Terminale");
+
+            classes.add(CI);
+            classes.add(CP);
+            classes.add(CE1);
+            classes.add(CE2);
+            classes.add(CM1);
+            classes.add(CM2);
+            classes.add(sixieme);
+            classes.add(cinquieme);
+            classes.add(quatrieme);
+            classes.add(troisieme);
+            classes.add(seconde);
+            classes.add(premiere);
+            classes.add(terminale);
+            classeRepository.saveAll(classes);
+
+            // Create Professeurs
+            List<Professeur> professeurs = new ArrayList<>();
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            for(int i=0;i<20;i++){
+                Professeur prof = new Professeur(null, faker.name().firstName(),faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), (Math.random()<0.5),genreRepository.findById((Math.random()<0.5)?1L:2L).orElse(null),"77"+aleatoire.nextInt(7,9999999),faker.date().between(df.parse("01-01-1970"),df.parse("01-01-1999")),matieres.get(aleatoire.nextInt(matieres.size())));
+                professeurs.add(prof);
+            }
+            professeurRepository.saveAll(professeurs);
+            // Create ProfesseurClasse
+            for (int i=0;i<=30;i++){
+                List<String> annee_scolaire = new ArrayList<>();
+                annee_scolaire.add("2019-2020");
+                annee_scolaire.add("2020-2021");
+                annee_scolaire.add("2021-2022");
+                List<ClasseProfesseur> annee_enseignes = new ArrayList<>();
+                Professeur rand_professeur = professeurs.get(aleatoire.nextInt(professeurs.size()));
+                Classe rand_classe = classes.get(aleatoire.nextInt(classes.size()));
+                ClasseProfesseur classeProfesseur = new ClasseProfesseur(null,
+                      annee_scolaire.get(aleatoire.nextInt(annee_scolaire.size())),
+                      rand_classe,
+                      rand_professeur);
+                annee_enseignes.add(classeProfesseur);
+                rand_professeur.setAnnees(annee_enseignes);
+                rand_classe.setProfesseurs_classes(annee_enseignes);
+              classeProfesseurRepository.save(classeProfesseur);
+              professeurRepository.save(rand_professeur);
+              classeRepository.save(rand_classe);
+            }
+            // Create Parents
+            List<Parent> parents = new ArrayList<>();
+            for(int i=0;i<20;i++){
+                Parent parent = new Parent(null, faker.name().firstName(), faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(),Math.random()<=0.5, (Math.random()<=0.5)?genre1:genre2,"77"+aleatoire.nextInt(7,9999999), "1770"+aleatoire.nextInt(9,9999999));
+                parents.add(parent);
+                parentRepository.save(parent);
+            }
+            // Create Eleves
+            parents.forEach(parent->{
+                for (int i=0;i<aleatoire.nextInt(4);i++){
+                    try {
+                        Eleve eleve = new Eleve(null, faker.name().firstName(), faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), Math.random()<=0.5, (Math.random()<=0.5)?genre1:genre2, null,null,faker.date().between(df.parse("01-01-2000"),df.parse("01-01-2017")),parent);
+                        eleveRepository.save(eleve);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+            // Create EleveClasse
+            eleveRepository.findAll().forEach(eleve -> {
+                List<String> annee_scolaire = new ArrayList<>();
+                annee_scolaire.add("2019-2020");
+                annee_scolaire.add("2020-2021");
+                annee_scolaire.add("2021-2022");
+                Classe rand_classe = classes.get(aleatoire.nextInt(classes.size()));
+                eleve.setMatricule(rand_classe.getLibelle().substring(0,2).toUpperCase()+
+                        '-' +'0'+aleatoire.nextInt(2,9)+
+                        eleve.getParent().getPrenom().substring(0,1).toUpperCase()+
+                        eleve.getParent().getNom().substring(0,1).toUpperCase());
+                EleveClasse eleveClasse = new EleveClasse(null,
+                        annee_scolaire.get(aleatoire.nextInt(annee_scolaire.size())),eleve,rand_classe);
+                eleveClasseRepository.save(eleveClasse);
+                eleveRepository.save(eleve);
+            });
+            // Create Notes
+            List<String> dates = new ArrayList<>();
+            for(int i=1;i<=200;i++){
+                Matiere matiere = matieres.get(aleatoire.nextInt(matieres.size()));
+                List<Eleve> eleves = eleveRepository.findAll();
+                Eleve eleve = eleves.get(aleatoire.nextInt(eleves.size()));
+                Evaluation evaluation = new Evaluation(null,faker.number().numberBetween(0,20),faker.date().between(df.parse("01-10-2019"),df.parse("30-06-2022")), matiere, eleve);
+                evaluationRepository.save(evaluation);
+            }
+
+        };
+    }
 }

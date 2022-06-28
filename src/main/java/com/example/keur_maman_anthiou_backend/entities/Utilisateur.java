@@ -5,21 +5,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role",length = 20)
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 public class  Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String prenom;
-    private String nom;
-    private String login;
-    private String password;
-    private String adresse;
-    private Boolean is_active;
+    protected Long id;
+    protected String prenom;
+    protected String nom;
+    protected String login;
+    protected String password;
+    protected String adresse;
+    protected Boolean is_active;
     @ManyToOne
-    private Genre genre;
+    protected Genre genre;
+    @Size(max = 12,message = "Le numero de te telephone de peut pas depasser 9 chiffres")
+    @Column(name = "telephone",nullable = true)
+    private String telephone;
 }
