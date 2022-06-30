@@ -35,4 +35,11 @@ public class AdministrateurImpl implements IAdministrateur{
         Administrateur administrateur = administrateurRepository.findById(id).orElse(null);
         return mapper.admin_to_adminDTO(administrateur);
     }
+
+    @Override
+    public AdministrateurDTO saveAdmin(AdministrateurDTO administrateurDTO) {
+        Administrateur administrateur = mapper.adminDTO_to_admin(administrateurDTO);
+        administrateurRepository.save(administrateur);
+        return mapper.admin_to_adminDTO(administrateur);
+    }
 }

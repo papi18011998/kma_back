@@ -13,6 +13,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Stream;
+
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -49,9 +51,16 @@ public class KeurMamanAnthiouBackendApplication {
                             ClasseRepository classeRepository,
                             EvaluationRepository evaluationRepository,
                             ClasseProfesseurRepository classeProfesseurRepository,
-                            EleveClasseRepository eleveClasseRepository){
+                            EleveClasseRepository eleveClasseRepository,
+                            RoleRepository roleRepository){
         return  args -> {
             // Create faker class
+            // Generate ROLES
+            Stream.of("ADMIN","PROFESSEUR","PARENT","ELEVE").forEach(roleName->{
+                AppRole role = new AppRole();
+                role.setRoleName(roleName);
+                roleRepository.save(role);
+            });
             Faker faker = new Faker(new Locale("fr_SN"));
             // Create Genres
             Collection<Genre> genres = new ArrayList<>();
@@ -96,11 +105,18 @@ public class KeurMamanAnthiouBackendApplication {
             Random aleatoire = new Random();
             // Create Administrateurs
             Collection<Administrateur> administrateurs = new ArrayList<>();
-
+            List<AppRole> roles =new ArrayList<>();
+            roles.add(roleRepository.findByRoleName("ADMIN"));
             Administrateur admin1 = new Administrateur(null, "Papa Ibrahima", "NDIAYE", "papi", "1234", "Diroga Cherif", true,genreRepository.findById(1L).orElse(null), "776692537");
             Administrateur admin2 = new Administrateur(null, "Cheikh", "SOW", "cheikh", "1234", "Malika", true,genreRepository.findById(1L).orElse(null), "776622537");
             Administrateur admin3 = new Administrateur(null, "Jacques Etienne", "NDIAYE", "jacques", "1234", "Keur Massar", true,genreRepository.findById(1L).orElse(null), "776622588");
             Administrateur admin4 = new Administrateur(null, "Maimouna", "DIALLO", "maimouna", "1234", "Maristes", true,genreRepository.findById(2L).orElse(null), "776622521");
+
+            admin1.setRoles(roles);
+            admin2.setRoles(roles);
+            admin3.setRoles(roles);
+            admin4.setRoles(roles);
+
             administrateurs.add(admin1);
             administrateurs.add(admin2);
             administrateurs.add(admin3);
@@ -143,7 +159,10 @@ public class KeurMamanAnthiouBackendApplication {
             List<Professeur> professeurs = new ArrayList<>();
             DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
             for(int i=0;i<20;i++){
+                List<AppRole> role_professeur =new ArrayList<>();
+                role_professeur.add(roleRepository.findByRoleName("PROFESSEUR"));
                 Professeur prof = new Professeur(null, faker.name().firstName(),faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), (Math.random()<0.5),genreRepository.findById((Math.random()<0.5)?1L:2L).orElse(null),"77"+aleatoire.nextInt(7,9999999),faker.date().between(df.parse("01-01-1970"),df.parse("01-01-1999")),matieres.get(aleatoire.nextInt(matieres.size())));
+                prof.setRoles(role_professeur);
                 professeurs.add(prof);
             }
             professeurRepository.saveAll(professeurs);
@@ -170,7 +189,10 @@ public class KeurMamanAnthiouBackendApplication {
             // Create Parents
             List<Parent> parents = new ArrayList<>();
             for(int i=0;i<20;i++){
+                List<AppRole> role_parent =new ArrayList<>();
+                role_parent.add(roleRepository.findByRoleName("PARENT"));
                 Parent parent = new Parent(null, faker.name().firstName(), faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(),Math.random()<=0.5, (Math.random()<=0.5)?genre1:genre2,"77"+aleatoire.nextInt(7,9999999), "1770"+aleatoire.nextInt(9,9999999));
+                parent.setRoles(role_parent);
                 parents.add(parent);
                 parentRepository.save(parent);
             }
@@ -178,7 +200,10 @@ public class KeurMamanAnthiouBackendApplication {
             parents.forEach(parent->{
                 for (int i=0;i<aleatoire.nextInt(4);i++){
                     try {
+                        List<AppRole> role_eleve =new ArrayList<>();
+                        role_eleve.add(roleRepository.findByRoleName("ELEVE"));
                         Eleve eleve = new Eleve(null, faker.name().firstName(), faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), Math.random()<=0.5, (Math.random()<=0.5)?genre1:genre2, null,null,faker.date().between(df.parse("01-01-2000"),df.parse("01-01-2017")),parent);
+                        eleve.setRoles(role_eleve);
                         eleveRepository.save(eleve);
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
