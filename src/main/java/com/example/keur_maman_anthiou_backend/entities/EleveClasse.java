@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class EleveClasse {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
     private String annee_scolaire;
     @ManyToOne

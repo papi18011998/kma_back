@@ -9,4 +9,6 @@ public interface IUtilisateur {
     public UtilisateurDTO getUser(Long id);
     public UtilisateurDTO change_status(Long id);
     public UtilisateurDTO update_profile(Long id,UtilisateurDTO utilisateurDTO);
+    public UtilisateurDTO findByLogin(String login);
+    public UtilisateurDTO findByTelephone(String telephone);
 }

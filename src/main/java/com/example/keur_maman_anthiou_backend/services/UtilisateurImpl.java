@@ -7,6 +7,7 @@ import com.example.keur_maman_anthiou_backend.repositories.UtilisateurRepository
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class UtilisateurImpl implements IUtilisateur {
@@ -52,5 +53,17 @@ public class UtilisateurImpl implements IUtilisateur {
             utilisateurRepository.save(utilisateur);
         }
         return mapper.utilisateur_to_utilisateurDTO(utilisateur);
+    }
+
+    @Override
+    public UtilisateurDTO findByLogin(String login) {
+        Utilisateur utilisateur = utilisateurRepository.findByLogin(login).orElse(null);
+        return (utilisateur==null)?null:mapper.utilisateur_to_utilisateurDTO(utilisateur);
+    }
+
+    @Override
+    public UtilisateurDTO findByTelephone(String telephone) {
+        Utilisateur utilisateur = utilisateurRepository.findByTelephone(telephone).orElse(null);
+        return (utilisateur==null)?null:mapper.utilisateur_to_utilisateurDTO(utilisateur);
     }
 }

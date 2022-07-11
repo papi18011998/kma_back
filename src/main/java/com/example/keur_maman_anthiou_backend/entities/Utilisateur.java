@@ -18,6 +18,7 @@ public class  Utilisateur {
     protected Long id;
     protected String prenom;
     protected String nom;
+    @Column(name = "login",unique = true)
     protected String login;
     protected String password;
     protected String adresse;
@@ -25,7 +26,7 @@ public class  Utilisateur {
     @ManyToOne
     protected Genre genre;
     @Size(max = 12,message = "Le numero de te telephone de peut pas depasser 9 chiffres")
-    @Column(name = "telephone",nullable = true)
+    @Column(name = "telephone",nullable = true,unique = true)
     private String telephone;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<AppRole> roles;

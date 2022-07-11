@@ -35,12 +35,14 @@ public class KmaMapper {
     public Professeur professeurDTO_to_professeur(ProfesseurDTO professeurDTO){
         Professeur professeur = new Professeur();
         BeanUtils.copyProperties(professeurDTO,professeur);
+        professeur.setMatiere(matiereDTO_to_matiere(professeurDTO.getMatiere()));
         return  professeur;
     }
 
     public  ProfesseurDTO professeur_to_professeurDTO(Professeur professeur){
         ProfesseurDTO professeurDTO = new ProfesseurDTO();
         BeanUtils.copyProperties(professeur,professeurDTO);
+        professeurDTO.setMatiere(matiere_to_matiereDTO(professeur.getMatiere()));
         return professeurDTO;
     }
 

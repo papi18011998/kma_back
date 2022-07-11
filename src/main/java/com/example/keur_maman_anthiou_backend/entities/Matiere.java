@@ -15,8 +15,4 @@ public class Matiere{
     private Long id;
     private String libelle;
     private int coefficient;
-    @OneToMany(mappedBy = "matiere")
-    private Collection<Professeur> professeurs;
-    @OneToMany(mappedBy = "matiere")
-    private Collection<Evaluation> evaluations;
 }

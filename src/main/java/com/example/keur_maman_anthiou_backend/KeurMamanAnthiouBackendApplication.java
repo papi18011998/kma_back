@@ -26,8 +26,10 @@ import javax.validation.constraints.Size;
 @Transactional
 public class KeurMamanAnthiouBackendApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(KeurMamanAnthiouBackendApplication.class, args);
+    public static void main(String[] args) {SpringApplication.run(KeurMamanAnthiouBackendApplication.class, args);}
+    @Bean
+    public Faker getFaker(){
+     return  new Faker();
     }
 //    @Bean
 //    CommandLineRunner sendSms(){
@@ -41,7 +43,7 @@ public class KeurMamanAnthiouBackendApplication {
 //            System.out.println(message.getSid());
 //        };
 //    }
-    @Bean
+//    @Bean
     CommandLineRunner start(AdministrateurRepository administrateurRepository,
                             EleveRepository eleveRepository,
                             ParentRepository parentRepository,
@@ -161,7 +163,7 @@ public class KeurMamanAnthiouBackendApplication {
             for(int i=0;i<20;i++){
                 List<AppRole> role_professeur =new ArrayList<>();
                 role_professeur.add(roleRepository.findByRoleName("PROFESSEUR"));
-                Professeur prof = new Professeur(null, faker.name().firstName(),faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), (Math.random()<0.5),genreRepository.findById((Math.random()<0.5)?1L:2L).orElse(null),"77"+aleatoire.nextInt(7,9999999),faker.date().between(df.parse("01-01-1970"),df.parse("01-01-1999")),matieres.get(aleatoire.nextInt(matieres.size())));
+                Professeur prof = new Professeur(null, faker.name().firstName(),faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), (Math.random()<0.5),genreRepository.findById((Math.random()<0.5)?1L:2L).orElse(null),"77"+aleatoire.nextInt(7,9999999),faker.date().between(df.parse("01-01-2010"),df.parse("01-01-2020")),matieres.get(aleatoire.nextInt(matieres.size())));
                 prof.setRoles(role_professeur);
                 professeurs.add(prof);
             }
@@ -202,7 +204,7 @@ public class KeurMamanAnthiouBackendApplication {
                     try {
                         List<AppRole> role_eleve =new ArrayList<>();
                         role_eleve.add(roleRepository.findByRoleName("ELEVE"));
-                        Eleve eleve = new Eleve(null, faker.name().firstName(), faker.name().lastName(), faker.name().firstName(), "1234", faker.address().streetName(), Math.random()<=0.5, (Math.random()<=0.5)?genre1:genre2, null,null,faker.date().between(df.parse("01-01-2000"),df.parse("01-01-2017")),parent);
+                        Eleve eleve = new Eleve(null, faker.name().firstName(), faker.name().lastName(), null, "1234", faker.address().streetName(), Math.random()<=0.5, (Math.random()<=0.5)?genre1:genre2, null,null,faker.date().between(df.parse("01-01-2000"),df.parse("01-01-2017")),parent);
                         eleve.setRoles(role_eleve);
                         eleveRepository.save(eleve);
                     } catch (ParseException e) {
@@ -221,6 +223,7 @@ public class KeurMamanAnthiouBackendApplication {
                         '-' +'0'+aleatoire.nextInt(2,9)+
                         eleve.getParent().getPrenom().substring(0,1).toUpperCase()+
                         eleve.getParent().getNom().substring(0,1).toUpperCase());
+                eleve.setLogin(eleve.getMatricule());
                 EleveClasse eleveClasse = new EleveClasse(null,
                         annee_scolaire.get(aleatoire.nextInt(annee_scolaire.size())),eleve,rand_classe);
                 eleveClasseRepository.save(eleveClasse);

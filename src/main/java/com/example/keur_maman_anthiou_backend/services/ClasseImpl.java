@@ -24,4 +24,10 @@ public class ClasseImpl implements IClasse{
         List<ClasseDTO> classes =classeList.stream().map(classe -> mapper.classe_to_classeDTO(classe)).collect(Collectors.toList());
         return classes;
     }
+
+    @Override
+    public ClasseDTO addClasse(ClasseDTO classeDTO) {
+        Classe classe = classeRepository.save(mapper.classeDTO_to_classe(classeDTO));
+        return mapper.classe_to_classeDTO(classe);
+    }
 }
