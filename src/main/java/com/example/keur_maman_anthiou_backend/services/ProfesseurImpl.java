@@ -31,4 +31,19 @@ public class ProfesseurImpl implements IProfesseur{
         professeurRepository.save(professeur);
         return  mapper.professeur_to_professeurDTO(professeur);
     }
+
+    @Override
+    public ProfesseurDTO updateProfesseur(long id, ProfesseurDTO professeurDTO) {
+        Professeur professeur = professeurRepository.findById(id).orElse(null);
+        if(professeur != null){
+            professeur.setPrenom(professeurDTO.getPrenom());
+            professeur.setNom(professeurDTO.getNom());
+            professeur.setAdresse(professeurDTO.getAdresse());
+            professeur.setGenre(professeurDTO.getGenre());
+            professeur.setDate_prise_fonction(professeurDTO.getDate_prise_fonction());
+            professeur.setMatiere(mapper.matiereDTO_to_matiere(professeurDTO.getMatiere()));
+            professeurRepository.save(professeur);
+        }
+        return (professeur==null)?null:mapper.professeur_to_professeurDTO(professeur);
+    }
 }

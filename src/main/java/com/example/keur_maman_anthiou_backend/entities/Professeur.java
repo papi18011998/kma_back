@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("professeur")
@@ -18,7 +19,7 @@ public class Professeur extends  Utilisateur{
     private Matiere matiere;
 
     @OneToMany(mappedBy = "professeur")
-    private Collection<ClasseProfesseur> annees;
+    private List<ClasseProfesseur> annees;
 
     public Professeur(Long id, String prenom, String nom, String login, String password, String adresse, Boolean is_active, Genre genre, @Size(max = 12, message = "Le numero de te telephone de peut pas depasser 9 chiffres") String telephone, Date date_prise_fonction, Matiere matiere) {
         super(id, prenom, nom, login, password, adresse, is_active, genre, telephone);

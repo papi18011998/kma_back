@@ -7,4 +7,5 @@ import java.util.List;
 public interface IProfesseur {
     public List<ProfesseurDTO> getProfesseurs();
     public ProfesseurDTO addProfesseur(ProfesseurDTO professeurDTO);
+    public ProfesseurDTO updateProfesseur(long id,ProfesseurDTO professeurDTO);
 }

@@ -17,7 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -54,6 +56,24 @@ public class ProfesseurController {
             classeProfesseurRepository.save(annee);
         });
         return professeurForm.getProfesseurDTO();
+    }
+    @PutMapping("professeurs/{id}")
+    public ProfesseurDTO update(@PathVariable long id, @RequestBody ProfesseurForm professeurForm){
+        Professeur professeurToUpdate = professeurRepository.findById(id).orElse(null);
+        //Suppression des anciennes classes
+        List<ClasseProfesseur> classeProfesseurs = new ArrayList<>();
+        professeurToUpdate.getAnnees().forEach(classeProfesseur -> {
+            classeProfesseurs.add(classeProfesseur);
+        });
+        classeProfesseurRepository.deleteAll(classeProfesseurs);
+        //Modification
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        professeurForm.getClasses().forEach(classeId->{
+            Classe classe = classeRepository.findById(classeId).orElse(null);
+            ClasseProfesseur classeProfesseur = new ClasseProfesseur(null,year-1+"-"+year,classe,professeurToUpdate);
+            classeProfesseurRepository.save(classeProfesseur);
+        });
+        return professeur.updateProfesseur(id,professeurForm.getProfesseurDTO());
     }
 }
 
