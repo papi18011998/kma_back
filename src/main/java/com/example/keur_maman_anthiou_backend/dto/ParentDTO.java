@@ -11,5 +11,4 @@ import java.util.Collection;
 public class ParentDTO extends  UtilisateurDTO{
     private String cni;
     private String telephone;
-    private Collection<Eleve> eleves;
 }

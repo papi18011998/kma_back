@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("eleve")
@@ -20,7 +21,7 @@ public class Eleve extends Utilisateur{
     private  Parent parent;
 
     @OneToMany(mappedBy = "eleve")
-    private Collection<EleveClasse> annees;
+    private List<EleveClasse> annees;
 
     @OneToMany(mappedBy = "eleve")
     private Collection<Evaluation> evaluations;

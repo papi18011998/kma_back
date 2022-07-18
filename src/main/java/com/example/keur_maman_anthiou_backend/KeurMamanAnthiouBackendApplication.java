@@ -2,11 +2,11 @@ package com.example.keur_maman_anthiou_backend;
 import com.example.keur_maman_anthiou_backend.entities.*;
 import com.example.keur_maman_anthiou_backend.repositories.*;
 import com.github.javafaker.Faker;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
@@ -15,16 +15,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Stream;
 
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import javax.validation.constraints.Size;
-
 @SpringBootApplication
 @Transactional
-public class KeurMamanAnthiouBackendApplication {
+public class KeurMamanAnthiouBackendApplication implements CommandLineRunner {
+    private final RepositoryRestConfiguration restConfiguration;
+
+    public KeurMamanAnthiouBackendApplication(RepositoryRestConfiguration restConfiguration) {
+        this.restConfiguration = restConfiguration;
+    }
+    @Override
+    public void run(String... args) throws Exception {
+        restConfiguration.exposeIdsFor(Parent.class);
+    }
 
     public static void main(String[] args) {SpringApplication.run(KeurMamanAnthiouBackendApplication.class, args);}
     @Bean
@@ -241,4 +243,6 @@ public class KeurMamanAnthiouBackendApplication {
 
         };
     }
+
+
 }
