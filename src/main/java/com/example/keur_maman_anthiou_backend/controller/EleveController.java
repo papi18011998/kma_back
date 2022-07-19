@@ -42,29 +42,62 @@ public class EleveController {
     }
     @PostMapping("eleves")
     public Eleve addEleve(@RequestBody EleveForm eleveForm) {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        int year = Calendar.getInstance().get(Calendar.YEAR);
         Eleve eleve = new Eleve();
-        Parent parent = parentRepository.findById(eleveForm.getParentId()).orElse(null);
         Genre genre = genreRepository.findById(eleveForm.getGenreId()).orElse(null);
         eleve.setPrenom(eleveForm.getPrenom());
         eleve.setNom(eleveForm.getNom());
         eleve.setPassword(faker.internet().password());
-        eleve.setAdresse(eleve.getAdresse());
-        eleve.setIs_active(true);
-        eleve.setParent(parent);
+        eleve.setAdresse(eleveForm.getAdresse());
         eleve.setGenre(genre);
+        eleve.setIs_active(true);
         eleve.setDate_naissance(eleveForm.getDate_naissance());
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-            Classe classe = classeRepository.findById(eleveForm.getAnnee()).orElse(null);
+        Classe classe = classeRepository.findById(eleveForm.getAnnee()).orElse(null);
+        Parent searchParent = parentRepository.findByCni(eleveForm.getCni()).orElse(null);
+        if(searchParent == null){
+            // Parent and student don't exist
+            Genre genreParent = genreRepository.findById(eleveForm.getGenreIdParent()).orElse(null);
+            Parent parent = new Parent();
+            parent.setPrenom(eleveForm.getPrenomParent());
+            parent.setNom(eleveForm.getNomParent());
+            parent.setAdresse(eleveForm.getAdresseParent());
+            parent.setTelephone(eleveForm.getTelephone());
+            parent.setCni(eleveForm.getCni());
+            parent.setLogin(eleveForm.getLogin());
+            parent.setPassword(faker.internet().password());
+            parent.setGenre(genreParent);
+            long idParent = parentRepository.save(parent).getId();
+
+            assert classe != null;
             String matricule = classe.getLibelle().substring(0, 2).toUpperCase() +
                     faker.number().digits(2) +
                     parent.getPrenom().substring(0, 1).toUpperCase() +
                     parent.getNom().substring(0, 1).toUpperCase();
+            eleve.setParent(parentRepository.findById(idParent).orElse(null));
             eleve.setLogin(matricule);
             eleve.setMatricule(matricule);
             long id = ieleve.addEleve(eleve).getId();
+
             EleveClasse eleveClasse = new EleveClasse(null,year-1+"-"+year,eleveRepository.findById(id).orElse(null),classe);
             eleveClasseRepository.save(eleveClasse);
-        return eleveRepository.findById(eleve.getId()).orElse(null);
+
+            return eleveRepository.findById(eleve.getId()).orElse(null);
+        }else {
+            // Parent exist
+            eleve.setParent(searchParent);
+
+            String matricule = classe.getLibelle().substring(0, 2).toUpperCase() +
+                    faker.number().digits(2) +
+                    searchParent.getPrenom().substring(0, 1).toUpperCase() +
+                    searchParent.getNom().substring(0, 1).toUpperCase();
+            eleve.setLogin(matricule);
+            eleve.setMatricule(matricule);
+            long id = ieleve.addEleve(eleve).getId();
+
+            EleveClasse eleveClasse = new EleveClasse(null,year-1+"-"+year,eleveRepository.findById(id).orElse(null),classe);
+            eleveClasseRepository.save(eleveClasse);
+
+            return eleveRepository.findById(eleve.getId()).orElse(null);
+        }
     }
 }

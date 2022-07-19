@@ -29,4 +29,10 @@ public class ParentImpl implements  IParent{
         List<Parent> parents = parentRepository.findAll();
         return  parents.stream().map(mapper::parent_to_parentDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public ParentDTO findByCni(String cni) {
+        Parent parent = parentRepository.findByCni(cni).orElse(null);
+        return (parent == null)?null:mapper.parent_to_parentDTO(parent);
+    }
 }

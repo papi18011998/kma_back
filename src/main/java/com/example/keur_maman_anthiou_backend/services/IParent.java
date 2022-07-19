@@ -8,4 +8,5 @@ import java.util.List;
 public interface IParent {
     public Parent addParent(Parent parent);
     public List<ParentDTO> getParents();
+    public ParentDTO findByCni(String cni);
 }
